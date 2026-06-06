@@ -1,6 +1,7 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import Portal from '../Portal/Portal';
 import { X as CloseIcon } from 'lucide-react';
+import styles from './Modal.module.css';
 
 type Props = {
   isOpen: boolean;
@@ -47,9 +48,10 @@ const Modal = ({ isOpen, onClose, children }: Props) => {
         onClose={onClose}
         onCancel={onClose}
         onClick={handleClickOutside}
+        className={styles.dialog}
       >
         {children}
-        <button onClick={onClose}>
+        <button className={styles.closeButton} onClick={onClose}>
           <CloseIcon />
         </button>
       </dialog>

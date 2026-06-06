@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Modal from '../Modal/Modal';
+import ReactHookForm from '../ReactHookForm/ReactHookForm';
 
 const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,7 +11,7 @@ const App = () => {
       <main>
         <button onClick={() => setIsModalOpen(true)}>Open form</button>
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          Hello World!
+          <ReactHookForm />
         </Modal>
       </main>
     </>
