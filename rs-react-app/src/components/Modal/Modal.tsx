@@ -12,7 +12,6 @@ const Modal = ({ isOpen, onClose, children }: Props) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    console.log(isOpen);
     const dialog = dialogRef.current;
 
     if (!dialog) return;
