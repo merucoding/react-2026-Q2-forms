@@ -1,8 +1,97 @@
+import { useState, type SubmitEvent } from 'react';
+import { useAppDispatch } from '../../store/hooks/redux';
+import { v4 as uuidv4 } from 'uuid';
+import styles from './UncontrolledForm.module.css';
+import Input from '../Input/Input';
+import GenderSelect from '../GenderSelect/GenderSelect';
+import { userSchema } from '../../schemas/validationSchema';
+import { z } from 'zod';
+import type { UserSubmission, ZodTreeifyError } from '../../types/form';
+import { addSubmission } from '../../store/form/formSlice';
+
 const UncontrolledForm = () => {
+  const dispatch = useAppDispatch();
+
+  const [errors, setErrors] = useState<Record<string, ZodTreeifyError> | null>(
+    null
+  );
+
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+
+    const ageValue = formData.get('age');
+
+    const data = {
+      name: formData.get('name'),
+      age: ageValue === '' ? undefined : Number(ageValue),
+      email: formData.get('email'),
+      gender: formData.get('gender'),
+      termsAccepted: formData.has('terms'),
+    };
+
+    const result = userSchema.safeParse(data);
+
+    if (!result.success) {
+      const tree = z.treeifyError(result.error);
+      setErrors(tree.properties ?? null);
+      return;
+    }
+
+    setErrors(null);
+
+    const sendData: UserSubmission = {
+      ...result.data,
+      id: uuidv4(),
+      formType: 'uncontrolled',
+      createdAt: new Date().toISOString(),
+    };
+
+    dispatch(addSubmission(sendData));
+    event.currentTarget.reset();
+  };
+
   return (
-    <>
-      <div></div>
-    </>
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <Input
+        id="name"
+        label="Name:"
+        error={errors?.name?.errors?.[0]}
+        type="text"
+        name="name"
+        placeholder="Enter your name"
+      />
+      <Input
+        id="email"
+        label="E-mail:"
+        error={errors?.email?.errors?.[0]}
+        type="text"
+        name="email"
+        placeholder="Enter your e-mail"
+      />
+      <GenderSelect
+        id="gender"
+        label="Gender:"
+        name="gender"
+        error={errors?.gender?.errors?.[0]}
+      />
+      <Input
+        id="age"
+        label="Age:"
+        error={errors?.age?.errors?.[0]}
+        type="number"
+        name="age"
+      />
+      <Input
+        id="terms"
+        label="Accept Terms & Conditions"
+        error={errors?.termsAccepted?.errors?.[0]}
+        type="checkbox"
+        name="terms"
+      />
+      <button type="submit">Submit</button>
+    </form>
   );
 };
 

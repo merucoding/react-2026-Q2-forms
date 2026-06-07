@@ -16,3 +16,9 @@ export interface UserSubmission {
   formType: 'uncontrolled' | 'react-hook-form';
   createdAt: string;
 }
+
+export type ZodTreeifyError = {
+  errors: string[];
+  properties?: Record<string, ZodTreeifyError>;
+  items?: (ZodTreeifyError | undefined)[];
+};
