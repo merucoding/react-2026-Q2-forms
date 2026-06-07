@@ -1,12 +1,17 @@
 import { useForm } from 'react-hook-form';
 import Input from '../Input/Input';
-// import type { UserSubmission } from '../../types/form';
 import GenderSelect from '../GenderSelect/GenderSelect';
 import styles from './ReactHookForm.module.css';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { userSchema, type UserFormData } from '../../schemas/validationSchema';
+import type { UserSubmission } from '../../types/form';
+import { v4 as uuidv4 } from 'uuid';
+import { addSubmission } from '../../store/form/formSlice';
+import { useAppDispatch } from '../../store/hooks/redux';
 
 const ReactHookForm = () => {
+  const dispatch = useAppDispatch();
+
   const {
     register,
     handleSubmit,
@@ -17,7 +22,13 @@ const ReactHookForm = () => {
   });
 
   const onSubmit = (data: UserFormData) => {
-    console.log(data);
+    const formData: UserSubmission = {
+      ...data,
+      id: uuidv4(),
+      formType: 'react-hook-form',
+      createdAt: new Date().toISOString(),
+    };
+    dispatch(addSubmission(formData));
   };
 
   return (
@@ -44,7 +55,9 @@ const ReactHookForm = () => {
         label="Age:"
         error={errors.age?.message}
         type="number"
-        {...register('age', { setValueAs: (value) => Number(value) })}
+        {...register('age', {
+          setValueAs: (value) => (value ? Number(value) : undefined),
+        })}
       />
       <Input
         id="terms"

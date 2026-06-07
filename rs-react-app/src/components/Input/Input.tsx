@@ -20,7 +20,7 @@ const Input = ({
         <input id={id} className={styles.input} {...props} />
       </div>
 
-      <div className={styles.error}>{error}</div>
+      {error && <div className={styles.error}>{error}</div>}
     </div>
   );
 };

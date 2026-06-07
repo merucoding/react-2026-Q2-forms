@@ -26,7 +26,7 @@ const GenderSelect = ({
         </select>
       </div>
 
-      <div className={styles.error}>{error}</div>
+      {error && <div className={styles.error}>{error}</div>}
     </div>
   );
 };

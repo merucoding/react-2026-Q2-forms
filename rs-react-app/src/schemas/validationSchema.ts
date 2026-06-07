@@ -11,13 +11,21 @@ export const userSchema = z.object({
       }
     ),
 
-  age: z.number().min(0, 'Age cannot be negative.'),
+  age: z
+    .number({
+      error: 'Age is required.',
+    })
+    .min(0, 'Age cannot be negative.'),
 
   email: z.email('Please enter a valid email.'),
 
-  gender: z.string().min(1, 'Please select gender.'),
+  gender: z.enum(['male', 'female', 'other'], {
+    message: 'Please select gender.',
+  }),
 
-  termsAccepted: z.boolean('You must accept the Terms & Conditions.'),
+  termsAccepted: z.literal(true, {
+    message: 'You must accept the Terms & Conditions.',
+  }),
 });
 
 export type UserFormData = z.infer<typeof userSchema>;
