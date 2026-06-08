@@ -1,0 +1,23 @@
+input[type="text"] {
+  width: 75%;
+}
+
+input[type="number"] {
+  width: 20%;
+}
+
+.field {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 10px;
+}
+
+.error {
+  color: red;
+}
+
+.field:has(input[type="file"]) {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}

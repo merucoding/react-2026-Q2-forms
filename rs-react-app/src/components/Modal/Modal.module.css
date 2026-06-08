@@ -1,0 +1,16 @@
+dialog {
+  width: 300px;
+  position: relative;
+  padding: 50px;
+}
+
+.closeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

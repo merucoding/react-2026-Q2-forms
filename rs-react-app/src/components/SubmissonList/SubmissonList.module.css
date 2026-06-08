@@ -1,0 +1,45 @@
+.container {
+  margin-top: 24px;
+}
+
+.item,
+.newItem {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+}
+
+.item {
+  border: 1px solid #dcdcdc;
+}
+
+.newItem {
+  border: 2px solid #4caf50;
+  background-color: #e8f5e9;
+  animation: fadeHighlight 5s forwards;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+@keyframes fadeHighlight {
+  0% {
+    background-color: #e8f5e9;
+  }
+
+  100% {
+    background-color: white;
+  }
+}
