@@ -11,11 +11,15 @@ import {
 import type { UserSubmission } from '../../types/form';
 import { v4 as uuidv4 } from 'uuid';
 import { addSubmission } from '../../store/form/formSlice';
-import { useAppDispatch } from '../../store/hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../store/hooks/redux';
 import { fileToBase64 } from '../../utils/fileToBase64';
+import { selectCountries } from '../../store/countries/countriesSelector';
+import CountriesSelect from '../CountriesSelect/CountriesSelect';
 
 const ReactHookForm = () => {
   const dispatch = useAppDispatch();
+
+  const countries = useAppSelector(selectCountries);
 
   const {
     register,
@@ -84,6 +88,13 @@ const ReactHookForm = () => {
         accept={VALID_IMAGE_TYPES.join(', ')}
         error={errors.image?.message}
         {...register('image')}
+      />
+      <CountriesSelect
+        id="country"
+        label="Select country:"
+        countries={countries}
+        error={errors.country?.message}
+        {...register('country')}
       />
       <Input
         id="password"

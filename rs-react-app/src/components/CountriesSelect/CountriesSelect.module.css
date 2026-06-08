@@ -1,0 +1,13 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 10px;
+}
+
+datalist {
+  width: 65%;
+}
+
+.error {
+  color: red;
+}

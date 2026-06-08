@@ -35,13 +35,15 @@ export const userSchema = z
       (value) => (value instanceof FileList ? value.item(0) : value),
       z
         .instanceof(File)
-        .refine((file) => file.size > 0, 'Image is required')
+        .refine((file) => file.size > 0, 'Image is required.')
         .refine(
           (file) => VALID_IMAGE_TYPES.includes(file.type),
           'Only PNG or JPEG'
         )
         .refine((file) => file.size <= MAX_IMAGE_SIZE, 'Max size 2MB')
     ),
+
+    country: z.string().min(1, 'Please select country.'),
 
     password: z
       .string()

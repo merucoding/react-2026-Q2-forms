@@ -1,5 +1,5 @@
 import { useState, type SubmitEvent } from 'react';
-import { useAppDispatch } from '../../store/hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../store/hooks/redux';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './UncontrolledForm.module.css';
 import Input from '../Input/Input';
@@ -9,9 +9,13 @@ import { z } from 'zod';
 import type { UserSubmission, ZodTreeifyError } from '../../types/form';
 import { addSubmission } from '../../store/form/formSlice';
 import { fileToBase64 } from '../../utils/fileToBase64';
+import CountriesSelect from '../CountriesSelect/CountriesSelect';
+import { selectCountries } from '../../store/countries/countriesSelector';
 
 const UncontrolledForm = () => {
   const dispatch = useAppDispatch();
+
+  const countries = useAppSelector(selectCountries);
 
   const [errors, setErrors] = useState<Record<string, ZodTreeifyError> | null>(
     null
@@ -35,6 +39,7 @@ const UncontrolledForm = () => {
       image: formData.get('image'),
       password: formData.get('password'),
       confirmPassword: formData.get('confirmPassword'),
+      country: formData.get('country'),
     };
 
     const result = userSchema.safeParse(data);
@@ -107,6 +112,13 @@ const UncontrolledForm = () => {
         accept={VALID_IMAGE_TYPES.join(', ')}
         error={errors?.image?.errors?.[0]}
         name="image"
+      />
+      <CountriesSelect
+        id="country"
+        label="Select country:"
+        countries={countries}
+        error={errors?.country?.errors?.[0]}
+        name="country"
       />
       <Input
         id="password"

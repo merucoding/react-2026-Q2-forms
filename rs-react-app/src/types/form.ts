@@ -15,7 +15,7 @@ export interface UserSubmission {
   image: string;
   password: string;
   confirmPassword: string;
-  // country: string;
+  country: string;
 
   formType: FormType;
   createdAt: string;
