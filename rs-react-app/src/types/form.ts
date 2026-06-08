@@ -1,3 +1,7 @@
+export type FormType = 'uncontrolled' | 'react-hook-form';
+
+export type ActiveFormType = FormType | null;
+
 export type Gender = 'male' | 'female' | 'other';
 
 export interface UserSubmission {
@@ -9,11 +13,11 @@ export interface UserSubmission {
   termsAccepted: boolean;
 
   image: string;
-  // password: string;
-  // confirmPassword: string;
+  password: string;
+  confirmPassword: string;
   // country: string;
 
-  formType: 'uncontrolled' | 'react-hook-form';
+  formType: FormType;
   createdAt: string;
 }
 

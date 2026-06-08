@@ -33,6 +33,8 @@ const UncontrolledForm = () => {
       gender: formData.get('gender'),
       termsAccepted: formData.has('termsAccepted'),
       image: formData.get('image'),
+      password: formData.get('password'),
+      confirmPassword: formData.get('confirmPassword'),
     };
 
     const result = userSchema.safeParse(data);
@@ -61,6 +63,7 @@ const UncontrolledForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
+      <h2>Uncontrolled Form</h2>
       <Input
         id="name"
         label="Name:"
@@ -104,6 +107,20 @@ const UncontrolledForm = () => {
         accept={VALID_IMAGE_TYPES.join(', ')}
         error={errors?.image?.errors?.[0]}
         name="image"
+      />
+      <Input
+        id="password"
+        label="Password:"
+        type="password"
+        error={errors?.password?.errors?.[0]}
+        name="password"
+      />
+      <Input
+        id="confirmPassword"
+        label="Confirm password:"
+        type="password"
+        error={errors?.confirmPassword?.errors?.[0]}
+        name="confirmPassword"
       />
       <button type="submit">Submit</button>
     </form>

@@ -1,19 +1,27 @@
 import { useState } from 'react';
 import Modal from '../Modal/Modal';
-// import ReactHookForm from '../ReactHookForm/ReactHookForm';
+import ReactHookForm from '../ReactHookForm/ReactHookForm';
 import UncontrolledForm from '../UncontrolledForm/UncontrolledForm';
+import type { ActiveFormType } from '../../types/form';
+
 
 const App = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeForm, setActiveForm] = useState<ActiveFormType>(null);
 
   return (
     <>
       <header>React Forms</header>
       <main>
-        <button onClick={() => setIsModalOpen(true)}>Open form</button>
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          {/* <ReactHookForm /> */}
-          <UncontrolledForm />
+        <button onClick={() => setActiveForm('react-hook-form')}>
+          Open React Hook Form
+        </button>
+        <button onClick={() => setActiveForm('uncontrolled')}>
+          Open Uncontrolled Form
+        </button>
+
+        <Modal isOpen={activeForm !== null} onClose={() => setActiveForm(null)}>
+          {activeForm === 'react-hook-form' && <ReactHookForm />}
+          {activeForm === 'uncontrolled' && <UncontrolledForm />}
         </Modal>
       </main>
     </>

@@ -43,6 +43,7 @@ const ReactHookForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+      <h2>React Hook Form</h2>
       <Input
         id="name"
         label="Name:"
@@ -83,6 +84,20 @@ const ReactHookForm = () => {
         accept={VALID_IMAGE_TYPES.join(', ')}
         error={errors.image?.message}
         {...register('image')}
+      />
+      <Input
+        id="password"
+        label="Password:"
+        type="password"
+        error={errors.password?.message}
+        {...register('password')}
+      />
+      <Input
+        id="confirmPassword"
+        label="Confirm password:"
+        type="password"
+        error={errors.confirmPassword?.message}
+        {...register('confirmPassword')}
       />
       <button type="submit" disabled={!isValid}>
         Submit
