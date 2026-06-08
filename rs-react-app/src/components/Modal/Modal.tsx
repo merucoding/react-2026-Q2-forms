@@ -51,7 +51,7 @@ const Modal = ({ isOpen, onClose, children }: Props) => {
         className={styles.dialog}
       >
         {children}
-        <button className={styles.closeButton} onClick={onClose}>
+        <button data-testid="close-modal" className={styles.closeButton} onClick={onClose}>
           <CloseIcon />
         </button>
       </dialog>

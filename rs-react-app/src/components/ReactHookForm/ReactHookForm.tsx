@@ -16,7 +16,11 @@ import { fileToBase64 } from '../../utils/fileToBase64';
 import { selectCountries } from '../../store/countries/countriesSelector';
 import CountriesSelect from '../CountriesSelect/CountriesSelect';
 
-const ReactHookForm = () => {
+type Props = {
+  onSuccess: () => void;
+};
+
+const ReactHookForm = ({ onSuccess }: Props) => {
   const dispatch = useAppDispatch();
 
   const countries = useAppSelector(selectCountries);
@@ -43,10 +47,22 @@ const ReactHookForm = () => {
     };
     dispatch(addSubmission(formData));
     reset();
+    onSuccess();
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === 'Enter') {
+      const form = e.currentTarget;
+      form.requestSubmit();
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className={styles.form}
+      onKeyDown={handleKeyDown}
+    >
       <h2>React Hook Form</h2>
       <Input
         id="name"

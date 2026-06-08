@@ -12,7 +12,11 @@ import { fileToBase64 } from '../../utils/fileToBase64';
 import CountriesSelect from '../CountriesSelect/CountriesSelect';
 import { selectCountries } from '../../store/countries/countriesSelector';
 
-const UncontrolledForm = () => {
+type Props = {
+  onSuccess: () => void;
+};
+
+const UncontrolledForm = ({ onSuccess }: Props) => {
   const dispatch = useAppDispatch();
 
   const countries = useAppSelector(selectCountries);
@@ -64,10 +68,22 @@ const UncontrolledForm = () => {
 
     dispatch(addSubmission(sendData));
     form.reset();
+    onSuccess();
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === 'Enter') {
+      const form = e.currentTarget;
+      form.requestSubmit();
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form
+      onSubmit={handleSubmit}
+      className={styles.form}
+      onKeyDown={handleKeyDown}
+    >
       <h2>Uncontrolled Form</h2>
       <Input
         id="name"
