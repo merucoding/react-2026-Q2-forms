@@ -59,7 +59,7 @@ export const userSchema = z
         message: 'Must contain special character',
       }),
 
-    confirmPassword: z.string(),
+    confirmPassword: z.string().min(8, 'Minimum 8 characters'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',
