@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+export const VALID_IMAGE_TYPES = ['image/jpeg', 'image/png'];
+const MAX_IMAGE_SIZE = 1024 * 1024 * 2;
+
 export const userSchema = z.object({
   name: z
     .string()
@@ -26,6 +29,18 @@ export const userSchema = z.object({
   termsAccepted: z.literal(true, {
     message: 'You must accept the Terms & Conditions.',
   }),
+
+  image: z.preprocess(
+    (value) => (value instanceof FileList ? value.item(0) : value),
+    z
+      .instanceof(File)
+      .refine((file) => file.size > 0, 'Image is required')
+      .refine(
+        (file) => VALID_IMAGE_TYPES.includes(file.type),
+        'Only PNG or JPEG'
+      )
+      .refine((file) => file.size <= MAX_IMAGE_SIZE, 'Max size 2MB')
+  ),
 });
 
-export type UserFormData = z.infer<typeof userSchema>;
+export type UserFormInput = z.input<typeof userSchema>;

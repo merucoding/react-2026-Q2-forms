@@ -4,10 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 import styles from './UncontrolledForm.module.css';
 import Input from '../Input/Input';
 import GenderSelect from '../GenderSelect/GenderSelect';
-import { userSchema } from '../../schemas/validationSchema';
+import { userSchema, VALID_IMAGE_TYPES } from '../../schemas/validationSchema';
 import { z } from 'zod';
 import type { UserSubmission, ZodTreeifyError } from '../../types/form';
 import { addSubmission } from '../../store/form/formSlice';
+import { fileToBase64 } from '../../utils/fileToBase64';
 
 const UncontrolledForm = () => {
   const dispatch = useAppDispatch();
@@ -16,19 +17,22 @@ const UncontrolledForm = () => {
     null
   );
 
-  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+
+    const formData = new FormData(form);
 
     const ageValue = formData.get('age');
 
     const data = {
       name: formData.get('name'),
-      age: ageValue === '' ? undefined : Number(ageValue),
+      age: ageValue ? Number(ageValue) : undefined,
       email: formData.get('email'),
       gender: formData.get('gender'),
-      termsAccepted: formData.has('terms'),
+      termsAccepted: formData.has('termsAccepted'),
+      image: formData.get('image'),
     };
 
     const result = userSchema.safeParse(data);
@@ -41,15 +45,18 @@ const UncontrolledForm = () => {
 
     setErrors(null);
 
+    const imageBase64 = await fileToBase64(data.image);
+
     const sendData: UserSubmission = {
       ...result.data,
+      image: imageBase64,
       id: uuidv4(),
       formType: 'uncontrolled',
       createdAt: new Date().toISOString(),
     };
 
     dispatch(addSubmission(sendData));
-    event.currentTarget.reset();
+    form.reset();
   };
 
   return (
@@ -88,7 +95,15 @@ const UncontrolledForm = () => {
         label="Accept Terms & Conditions"
         error={errors?.termsAccepted?.errors?.[0]}
         type="checkbox"
-        name="terms"
+        name="termsAccepted"
+      />
+      <Input
+        id="image"
+        label="Add your avatar:"
+        type="file"
+        accept={VALID_IMAGE_TYPES.join(', ')}
+        error={errors?.image?.errors?.[0]}
+        name="image"
       />
       <button type="submit">Submit</button>
     </form>

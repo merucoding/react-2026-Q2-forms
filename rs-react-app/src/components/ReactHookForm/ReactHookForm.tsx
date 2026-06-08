@@ -1,13 +1,18 @@
-import { useForm } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import Input from '../Input/Input';
 import GenderSelect from '../GenderSelect/GenderSelect';
 import styles from './ReactHookForm.module.css';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { userSchema, type UserFormData } from '../../schemas/validationSchema';
+import {
+  userSchema,
+  VALID_IMAGE_TYPES,
+  type UserFormInput,
+} from '../../schemas/validationSchema';
 import type { UserSubmission } from '../../types/form';
 import { v4 as uuidv4 } from 'uuid';
 import { addSubmission } from '../../store/form/formSlice';
 import { useAppDispatch } from '../../store/hooks/redux';
+import { fileToBase64 } from '../../utils/fileToBase64';
 
 const ReactHookForm = () => {
   const dispatch = useAppDispatch();
@@ -15,20 +20,25 @@ const ReactHookForm = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isValid },
-  } = useForm<UserFormData>({
+  } = useForm<UserFormInput>({
     resolver: zodResolver(userSchema),
     mode: 'onChange',
   });
 
-  const onSubmit = (data: UserFormData) => {
+  const onSubmit: SubmitHandler<UserFormInput> = async (data) => {
+    const imageBase64 = await fileToBase64(data.image);
+
     const formData: UserSubmission = {
       ...data,
+      image: imageBase64,
       id: uuidv4(),
       formType: 'react-hook-form',
       createdAt: new Date().toISOString(),
     };
     dispatch(addSubmission(formData));
+    reset();
   };
 
   return (
@@ -65,6 +75,14 @@ const ReactHookForm = () => {
         error={errors.termsAccepted?.message}
         type="checkbox"
         {...register('termsAccepted')}
+      />
+      <Input
+        id="image"
+        label="Add your avatar:"
+        type="file"
+        accept={VALID_IMAGE_TYPES.join(', ')}
+        error={errors.image?.message}
+        {...register('image')}
       />
       <button type="submit" disabled={!isValid}>
         Submit

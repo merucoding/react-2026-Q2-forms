@@ -8,7 +8,7 @@ export interface UserSubmission {
   gender: Gender;
   termsAccepted: boolean;
 
-  // image: string;
+  image: string;
   // password: string;
   // confirmPassword: string;
   // country: string;

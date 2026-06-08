@@ -15,3 +15,9 @@ input[type="number"] {
 .error {
   color: red;
 }
+
+.field:has(input[type="file"]) {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}
