@@ -73,6 +73,7 @@ const UncontrolledForm = ({ onSuccess }: Props) => {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
     if (e.key === 'Enter') {
+      e.preventDefault();
       const form = e.currentTarget;
       form.requestSubmit();
     }
