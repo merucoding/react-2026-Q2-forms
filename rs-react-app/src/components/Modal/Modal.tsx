@@ -24,6 +24,31 @@ const Modal = ({ isOpen, onClose, children }: Props) => {
     if (!isOpen && dialog.open) {
       dialog.close();
     }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+
+      const first = dialog.querySelector('[data-focus-first]');
+      const last = dialog.querySelector('[data-focus-last]');
+
+      if (e.shiftKey) {
+        if (e.target === first) {
+          e.preventDefault();
+          (last as HTMLElement)?.focus();
+        }
+      } else {
+        if (e.target === last) {
+          e.preventDefault();
+          (first as HTMLElement)?.focus();
+        }
+      }
+    };
+
+    dialog.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      dialog.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen]);
 
   const handleClickOutside = (event: React.MouseEvent<HTMLDialogElement>) => {
@@ -51,7 +76,12 @@ const Modal = ({ isOpen, onClose, children }: Props) => {
         className={styles.dialog}
       >
         {children}
-        <button data-testid="close-modal" className={styles.closeButton} onClick={onClose}>
+        <button
+          data-testid="close-modal"
+          className={styles.closeButton}
+          data-focus-last
+          onClick={onClose}
+        >
           <CloseIcon />
         </button>
       </dialog>

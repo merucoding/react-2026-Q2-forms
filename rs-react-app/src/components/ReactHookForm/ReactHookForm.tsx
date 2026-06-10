@@ -71,6 +71,7 @@ const ReactHookForm = ({ onSuccess }: Props) => {
         error={errors.name?.message}
         type="text"
         placeholder="Enter your name"
+        data-focus-first
         {...register('name')}
       />
       <Input

@@ -93,6 +93,7 @@ const UncontrolledForm = ({ onSuccess }: Props) => {
         type="text"
         name="name"
         placeholder="Enter your name"
+        data-focus-first
       />
       <Input
         id="email"
