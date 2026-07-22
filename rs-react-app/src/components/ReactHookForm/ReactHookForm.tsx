@@ -52,6 +52,7 @@ const ReactHookForm = ({ onSuccess }: Props) => {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
     if (e.key === 'Enter') {
+      e.preventDefault();
       const form = e.currentTarget;
       form.requestSubmit();
     }
@@ -70,6 +71,7 @@ const ReactHookForm = ({ onSuccess }: Props) => {
         error={errors.name?.message}
         type="text"
         placeholder="Enter your name"
+        data-focus-first
         {...register('name')}
       />
       <Input

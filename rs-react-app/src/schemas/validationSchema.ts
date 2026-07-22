@@ -19,7 +19,10 @@ export const userSchema = z
       .number({
         error: 'Age is required.',
       })
-      .min(0, 'Age cannot be negative.'),
+      .min(0, 'Age cannot be negative.')
+      .refine((value) => !Object.is(value, -0), {
+        message: 'Age cannot be -0.',
+      }),
 
     email: z.email('Please enter a valid email.'),
 
